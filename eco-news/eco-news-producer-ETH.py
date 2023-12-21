@@ -5,7 +5,7 @@ from kafka import KafkaProducer
 
 # Kafka Parameters
 broker = 'localhost:9092'  
-topic = 'eco-news'
+topic = 'eco-new-ethereum'
 
 # Configuration du producteur Kafka
 producer = KafkaProducer(
@@ -16,7 +16,7 @@ producer = KafkaProducer(
 # Récupération et envoi des articles
 def fetch_and_send_articles():
     #url = 'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=a61ddae6d1f04e839adb6268a8451c28'
-    url = 'https://newsapi.org/v2/everything?language=en&q=Polygon&apiKey=e25be3a31137436c8e8af1b0247cd2c4'
+    url = 'https://newsapi.org/v2/everything?language=en&q=ethereum&from=2023-11-21&apiKey=a61ddae6d1f04e839adb6268a8451c28'
     response = requests.get(url)
     if response.status_code == 200:
         articles = response.json().get('articles', [])
