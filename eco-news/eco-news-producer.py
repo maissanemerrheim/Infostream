@@ -15,13 +15,16 @@ producer = KafkaProducer(
 
 # Récupération et envoi des articles
 def fetch_and_send_articles():
-    url = 'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=a61ddae6d1f04e839adb6268a8451c28'
+    #url = 'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=a61ddae6d1f04e839adb6268a8451c28'
+    url = 'https://newsapi.org/v2/everything?language=en&q=bitcoin&from=2023-11-21&apiKey=a61ddae6d1f04e839adb6268a8451c28'
     response = requests.get(url)
     if response.status_code == 200:
         articles = response.json().get('articles', [])
         for article in articles:
             producer.send("eco-news", article)
         print("Data sent to Kafka topic")
+        producer.send(topic, {"fin_de_vague": True})
+        print("Message de fin de vague envoyé")
     else:
         print(f"Erreur lors de la récupération des articles : {response.status_code}")
 
