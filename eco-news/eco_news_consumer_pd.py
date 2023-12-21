@@ -19,56 +19,55 @@ consumer = KafkaConsumer(
 )
 
 # Boucle principale pour lire les messages
+
 eco_articles = []
 try:
     print("Démarrage du consommateur. En attente de messages...")
     for message in consumer:
         if 'fin_de_vague' in message.value and message.value['fin_de_vague']:
             print("Fin de vague de messages")
-            with open('eco_articles.json', 'w') as file:
-                json.dump(eco_articles, file)
 
-            # Load the data 
-            with open('eco_articles.json', 'r') as file:
-                json_data = file.read()
+            # Créer un DataFrame Pandas directement avec les données reçues
+            df_eco = pd.DataFrame(eco_articles)
 
-            # Convert the data into a DataFrame for better manipulation
-            data_eco = pd.read_json(json_data)
-            df_eco = pd.DataFrame(data_eco)
+            # Créer une liste des titres d'articles
+            top_headlines = df_eco["title"].tolist()
 
-            # Create a list of the article titles 
-            top_headlines = []
-            for i in range(len(df_eco)) : 
-                top_headlines.append(df_eco["title"][i])
-
-            # Tokenize the article titles and run them through the model 
-            inputs = tokenizer(top_headlines, padding = True, truncation = True, return_tensors='pt')
+            # Tokeniser les titres d'articles et les faire passer à travers le modèle
+            inputs = tokenizer(top_headlines, padding=True, truncation=True, return_tensors='pt')
             outputs = model(**inputs)
 
-            # Compute the predictions of our model 
+            # Calculer les prédictions de notre modèle
             predictions = torch.nn.functional.softmax(outputs.logits, dim=-1)
 
             positive = predictions[:, 0].tolist()
             negative = predictions[:, 1].tolist()
             neutral = predictions[:, 2].tolist()
 
+            # Créer un tableau avec les données
+            table = {
+                'Headline': top_headlines,
+                "Positive": positive,
+                "Negative": negative,
+                "Neutral": neutral
+            }
 
-            table = {'Headline':top_headlines,
-                    "Positive":positive,
-                    "Negative":negative, 
-                    "Neutral":neutral}
-                
-            df_eco_news = pd.DataFrame(table, columns = ["Headline", "Positive", "Negative", "Neutral"])
-            print(df_eco_news)
-            df_eco_news.to_csv("./articles_eco.csv")
+            # Créer un DataFrame à partir du tableau
+            df_eco_news = pd.DataFrame(table, columns=["Headline", "Positive", "Negative", "Neutral"])
             
+            # Enregistrer le DataFrame directement dans un fichier CSV
+            df_eco_news.to_csv('eco_articles.csv', index=False)
+            
+            # Réinitialiser eco_articles pour la prochaine vague de messages
             eco_articles = []
+            
             print("En attente de messages...")
-        else : 
-            article = message.value
-            # print(f'Reçu : {article["title"]}')
+        else:
             article = message.value
             eco_articles.append(article)
+
+except Exception as e:
+    print(f"Une erreur s'est produite : {str(e)}")
 
 except KeyboardInterrupt:
     print("Arrêt du consommateur")
