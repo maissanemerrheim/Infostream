@@ -49,7 +49,7 @@ To run the consumer script, use the following command:
     python eco_news_consumer.py <topic>
 ```
 
-Replace <topic> with the Kafka topic from which you want to consume messages (topic_<keywords> with _ if you have spaces). The consumer will perform sentiment analysis on the received articles using the FinBERT model and save the results in CSV files specific to the topic.
+Replace <topic> with the Kafka topic from which you want to consume messages (topic_keywords with _ if you have spaces). The consumer will perform sentiment analysis on the received articles using the FinBERT model and save the results in CSV files specific to the topic.
 
 ## Authors and acknowledgment
 LAMJOUN Jihane
