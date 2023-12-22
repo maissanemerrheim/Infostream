@@ -1,27 +1,56 @@
-# InfoStream
+# EcoNews Sentiment Analysis with Kafka Integration
 
-## Name
-InfoStream
+This project consists of two Python scripts: one for producing news articles from an external API to a Kafka topic, and the other for consuming and analyzing those articles for sentiment analysis.
 
-## Description
-Collect tweets from Twitter API in real-time and use a classification method to classify them for sentiment analysis. Twitter introduced a new API (API V2/ Essential Access) which gives access to the stream Tweets right away without validation. Getting Started with the Twitter API | Docs | Twitter Developer Platform. You are free to find any public streaming data or API : Twitter, Facebook, Youtube, or any other tool and choose your machine learning task. Do one of the following learning tasks :
-1. Sentiment analysis
-2. Community group detection
-3. Trending topics.
+## Prerequisites
 
-## Badges
+Before running the producer and consumer scripts, make sure you have the following prerequisites installed:
 
+- Python 3.x
+- Kafka Server (with ZooKeeper)
 
-## Visuals
+To start ZooKeeper, use the following command:
+  ```bash
+  ./bin/zookeeper-server-start.sh config/zookeeper.properties
+  ```
+
+To start Kafka Server, use the following command:
+```bash
+./bin/kafka-server-start.sh config/server.properties
+```
+
+Make sure to adapt the paths and configurations according to your actual Kafka setup.
+
+You will also need an API key for the news service (https://newsapi.org/)
 
 ## Installation
 
-## Usage
+Clone the repository:
+
+```bash
+   git clone https://github.com/maissanemerrheim/Infostream.git
+```
+
+## USAGE
+### Producer
+To run the producer script, use the following command:
+```bash
+    python eco_news_producer.py <keywords>
+```
+
+Replace <keywords> with the keywords you want to use for news searching. This script will continuously fetch news articles based on the provided keywords and send them to a Kafka topic.
+
+WARNING: It's essential to select appropriate keywords related to economic topics because we use the FinBERT model for sentiment analysis, a pre-trained transformer-based model designed specifically for financial sentiment analysis.
+
+
+### Consumer
+To run the consumer script, use the following command:
+```bash
+    python eco_news_consumer.py <topic>
+```
+
+Replace <topic> with the Kafka topic from which you want to consume messages (topic_<keywords> with _ if you have spaces). The consumer will perform sentiment analysis on the received articles using the FinBERT model and save the results in CSV files specific to the topic.
 
 ## Authors and acknowledgment
 LAMJOUN Jihane
 MERRHEIM Maïssane
-
-
-## Project status
-
