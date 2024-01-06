@@ -1,6 +1,6 @@
 # EcoNews Sentiment Analysis with Kafka Integration
 
-This project consists of two Python scripts: one for producing news articles from an external API to a Kafka topic, and the other for consuming and analyzing those articles for sentiment analysis.
+This project consists of two Python scripts: one for producing news articles from an external API to a Kafka topic, and the other for consuming and analyzing those articles for sentiment analysis. This project also includes a notebook for visualizing results. You'll also find 2 folders for results obtained with articles on cryptocurrency and stock market indices
 
 ## Prerequisites
 
