@@ -64,7 +64,7 @@ class EcoNewsConsumer:
             json.dump(self.eco_articles, file)
 
         # Load the data
-        with open('eco_articles.json', 'r') as file:
+        with open(f'eco_articles_{self.input_topic}.json', 'r') as file:
             json_data = file.read()
         data_eco = pd.read_json(StringIO(json_data))
         df_eco = pd.DataFrame(data_eco)
